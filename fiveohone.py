@@ -319,12 +319,20 @@ class fiveOhOne:
         
         self.darts_at_doubles = int(self.dartsatdouble.get())
         if player1.stats['score'] == 0:
-                    self.legWon = Toplevel()
-                    Label(self.legWon, text="Darts Used: ").grid(row=1, column=0)
-                    self.leg_won = Combobox(self.legWon, width=5, textvariable = self.legwondarts)
-                    self.leg_won.bind("<<ComboboxSelected>>", self.leg_won_darts)
-                    self.leg_won['values'] = ('1', '2', '3')
-                    self.leg_won.grid(row= 1, column =1)
+            self.legWon = Toplevel()
+            Label(self.legWon, text="Darts Used: ").grid(row=1, column=0)
+            self.leg_won = Combobox(self.legWon, width=5, textvariable = self.legwondarts)
+            self.leg_won.bind("<<ComboboxSelected>>", self.leg_won_darts)
+            self.leg_won['values'] = ('1', '2', '3')
+            self.leg_won.grid(row= 1, column =1)
+        elif player2.stats['score'] == 0:
+            self.legWon = Toplevel()
+            Label(self.legWon, text="Darts Used: ").grid(row=1, column=0)
+            self.leg_won = Combobox(self.legWon, width=5, textvariable = self.legwondarts)
+            self.leg_won.bind("<<ComboboxSelected>>", self.leg_won_darts)
+            self.leg_won['values'] = ('1', '2', '3')
+            self.leg_won.grid(row= 1, column =1)
+            
         if game_state.playertogo == 2:
             player1.stats['dartsatdoubles'] += self.darts_at_doubles
         else:
@@ -333,8 +341,21 @@ class fiveOhOne:
         self.dartsAtDouble.destroy()
 
 
-    def leg_won_darts(self):
-        pass
+    def leg_won_darts(self, last_Darts):
+
+        lastDarts = int(self.legwondarts.get())
+        if game_state.playertogo == 2:
+            player1.stats['numberDarts'] -= (3 - lastDarts)
+            player1.stats['legs'] += 1
+            print(player1.stats['numberDarts'])
+            print('1')
+        else:
+            player2.stats['numberDarts'] -= (3 - lastDarts)
+            player2.stats['legs'] += 1
+            print('2')
+        self.stats_update(player1, player2)
+        self.legWon.destroy()
+            
 
 
         
