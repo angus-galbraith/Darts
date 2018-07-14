@@ -300,6 +300,13 @@ class fiveOhOne:
             self.playertogo.set(self.player1name)
             self.remlabel1.configure(background='yellow')
             self.remlabel2.configure(background='white')
+            if (player2.stats['score'] >= 0) and (player2.stats['score']< 50):
+                self.dartsAtDouble = Toplevel()
+                Label(self.dartsAtDouble, text="Darts at Double: ").grid(row=1, column=0)
+                self.doubleDarts = Combobox(self.dartsAtDouble, width=5, textvariable = self.dartsatdouble)
+                self.doubleDarts.bind("<<ComboboxSelected>>", self.darts_at_double)
+                self.doubleDarts['values'] = ('0','1', '2', '3')
+                self.doubleDarts.grid(row= 1, column =1)
             self.number_entry.delete(0, END)
             game_state.playertogo = 1
 
@@ -320,6 +327,8 @@ class fiveOhOne:
                     self.leg_won.grid(row= 1, column =1)
         if game_state.playertogo == 2:
             player1.stats['dartsatdoubles'] += self.darts_at_doubles
+        else:
+            player2.stats['dartsatdoubles'] += self.darts_at_doubles
         self.stats_update(player1, player2)
         self.dartsAtDouble.destroy()
 
