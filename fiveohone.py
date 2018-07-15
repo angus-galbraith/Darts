@@ -242,12 +242,34 @@ class fiveOhOne:
                 self.playertogo.set(self.player1name)
                 self.remlabel1.configure(background='yellow')
                 self.remlabel2.configure(background='white')
+                player1.stats['score'] = 501
+                player2.stats['score'] = 501
                 game_state.playertogo = 1
             else:
                 self.playertogo.set(self.player2name)
                 self.remlabel2.configure(background='yellow')
                 self.remlabel1.configure(background='white')
+                player1.stats['score'] =501
+                player2.stats['score'] = 501
                 game_state.playertogo = 2
+
+        else:
+            if legs % 2 != 0:
+                self.playertogo.set(self.player2name)
+                self.remlabel2.configure(background='yellow')
+                self.remlabel1.configure(background='white')
+                player1.stats['score'] =501
+                player2.stats['score'] = 501
+                game_state.playertogo = 2
+            else:
+                self.playertogo.set(self.player1name)
+                self.remlabel1.configure(background='yellow')
+                self.remlabel2.configure(background='white')
+                player1.stats['score'] = 501
+                player2.stats['score'] = 501
+                game_state.playertogo = 1
+                
+            
                 
 
         
@@ -349,12 +371,33 @@ class fiveOhOne:
             player1.stats['numberDarts'] -= (3 - lastDarts)
             player1.stats['legs'] += 1
             player1.stats['doubleshit'] += 1
+            player1.stats['checkoutpc'] = round(player1.stats['doubleshit']/player1.stats['dartsatdoubles'] * 100, 2)
+            game_state.currentlegs += 1
+            if player1.stats['legs'] == 3:
+                player1.stats['sets'] += 1
+                player1.stats['legs'] = 0
+                player2.stats['legs'] = 0
+                game_state.currentsets += 1
+                game_state.currentlegs = 1
+                self.who_starts(game_state.currentsets, game_state.currentlegs)
+            
             print('1')
         else:
             player2.stats['numberDarts'] -= (3 - lastDarts)
             player2.stats['legs'] += 1
             player2.stats['doubleshit'] +=1
+            player2.stats['checkoutpc'] = round(player2.stats['doubleshit']/player2.stats['dartsatdoubles'] * 100, 2)
+            game_state.currentlegs += 1
+            if player2.stats['legs'] == 3:
+                player2.stats['sets'] += 1
+                player2.stats['legs'] = 0
+                player2.stats['legs'] = 0
+                game_state.currentsets += 1
+                game_state.currentlegs = 1
+                self.who_starts(game_state.currentsets, game_state.currentlegs)
             print('2')
+
+        self.who_starts(game_state.currentsets, game_state.currentlegs)
         self.stats_update(player1, player2)
         self.legWon.destroy()
             
