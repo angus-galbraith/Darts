@@ -44,7 +44,7 @@ class fiveOhOne:
         labFrame3 = LabelFrame(self.master, text="Player1 Scores")
         labFrame4 = LabelFrame(self.master, text="Player2  Scores")
         labFrame5 = LabelFrame(self.master, text="Enter Scores")
-        self.labFrame6 = LabelFrame(self.master, text="Additional info")
+        #self.labFrame6 = LabelFrame(self.master, text="Additional info")
 
         #make frames vis(ible
         labFrame1.grid(row=0, column=0, rowspan=2, sticky='ns')
@@ -52,7 +52,7 @@ class fiveOhOne:
         labFrame4.grid(row=0, column=2)
         labFrame2.grid(row=0, column=3, rowspan=2, sticky='ns')
         labFrame5.grid(row=1, column=1, columnspan=2, sticky='ew')
-        self.labFrame6.grid(row=3, column=1, columnspan=2, sticky='ew')
+        #self.labFrame6.grid(row=3, column=1, columnspan=2, sticky='ew')
 
         #stringvars
         self.pl1name = StringVar()
@@ -178,22 +178,7 @@ class fiveOhOne:
         self.number_entry.focus()
 
 
-        #frame6 widgets
-        self.dartsatdouble= StringVar()
-        self.legwondarts = StringVar()
-        Label(self.labFrame6, text="    ").grid(row=0, column=0)
-              
-        self.doubleDarts = Combobox(self.labFrame6, width=5, textvariable = self.dartsatdouble)
-        self.doubleDarts.bind("<<ComboboxSelected>>", self.darts_at_double)
-        self.doubleDarts['values'] = ('1', '2', '3')
-        self.doubleDarts.grid(row= 1, column =1)
-        self.doubleDarts.grid_remove()
-        self.doubleDarts_label = Label(self.labFrame6, text=' No of darts at double')
-        self.doubleDarts_label.grid(row = 1, column =2)
-        self.doubleDarts_label.grid_remove()
-        self.legWon = Combobox(self.labFrame6, width=5, textvariable = self.legwondarts)
-        self.legWon.bind("<<ComboboxSelected>>", self.leg_won_darts)
-
+        
         
     def stats_update(self, player1, player2):
 
@@ -210,6 +195,13 @@ class fiveOhOne:
         self.pl1180.set(player1.stats['180'])
         numbset = ("%s / %s" % (player1.stats['dartsatdoubles'], player1.stats['doubleshit']))
         self.pl1chtnumbs.set(numbset)
+        #if player1.stats['dartsatdoubles'] == 0:
+            #player1.stats['doubleshit'] = 1
+            
+        #pc1 = (player1.stats['dartsatdoubles']/player1.stats['doubleshit'])
+        
+        self.pl1chtpc.set(player1.stats['checkoutpc'])
+        
         average1 = (player1.stats['totalScore']/player1.stats['numberDarts'])*3
         average1 = round(average1, 2)
         self.pl1avg.set(average1)
@@ -228,6 +220,12 @@ class fiveOhOne:
         self.pl2avg.set(player2.stats['avg'])
         numbset2 = ("%s / %s" % (player2.stats['dartsatdoubles'], player2.stats['doubleshit']))
         self.pl2chtnumbs.set(numbset2)
+        #if player2.stats['dartsatdoubles'] == 0:
+            #player2.stats['doubleshit'] = 1
+        #pc2 = (player2.stats['dartsatdoubles']/player2.stats['doubleshit'])
+        
+        self.pl2chtpc.set(player2.stats['checkoutpc'])
+        
         average2 = (player2.stats['totalScore']/player2.stats['numberDarts'])*3
         average2 = round(average2, 2)
         self.pl2avg.set(average2)
@@ -260,9 +258,12 @@ class fiveOhOne:
 
     def score_Entered(self):
 
+        self.dartsatdouble = StringVar()
+
         if self.counter == 1:
             player1.stats['totalScore'] = 0
             player1.stats['numberDarts'] = 0
+            
         elif self.counter ==2:
             player2.stats['totalScore'] = 0
             player2.stats['numberDarts'] = 0
@@ -347,11 +348,12 @@ class fiveOhOne:
         if game_state.playertogo == 2:
             player1.stats['numberDarts'] -= (3 - lastDarts)
             player1.stats['legs'] += 1
-            print(player1.stats['numberDarts'])
+            player1.stats['doubleshit'] += 1
             print('1')
         else:
             player2.stats['numberDarts'] -= (3 - lastDarts)
             player2.stats['legs'] += 1
+            player2.stats['doubleshit'] +=1
             print('2')
         self.stats_update(player1, player2)
         self.legWon.destroy()
@@ -382,7 +384,8 @@ class dartPlayer:
                       'totalScore': 1,
                       'numberDarts': 1,
                       'dartsatdoubles': 0,
-                      'doubleshit':0}
+                      'doubleshit':0,
+                      'checkoutpc': 0}
 
     def status(self, score_entered, player):
 
