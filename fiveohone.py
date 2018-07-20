@@ -193,7 +193,7 @@ class fiveOhOne:
         self.pl1100.set(player1.stats['100+'])
         self.pl1140.set(player1.stats['140+'])
         self.pl1180.set(player1.stats['180'])
-        numbset = ("%s / %s" % (player1.stats['dartsatdoubles'], player1.stats['doubleshit']))
+        numbset = ("%s / %s" % (player1.stats['doubleshit'], player1.stats['dartsatdoubles'] ))
         self.pl1chtnumbs.set(numbset)
         #if player1.stats['dartsatdoubles'] == 0:
             #player1.stats['doubleshit'] = 1
@@ -218,7 +218,7 @@ class fiveOhOne:
         self.pl2140.set(player2.stats['140+'])
         self.pl2180.set(player2.stats['180'])
         self.pl2avg.set(player2.stats['avg'])
-        numbset2 = ("%s / %s" % (player2.stats['dartsatdoubles'], player2.stats['doubleshit']))
+        numbset2 = ("%s / %s" % (player2.stats['doubleshit'],player2.stats['dartsatdoubles']))
         self.pl2chtnumbs.set(numbset2)
         #if player2.stats['dartsatdoubles'] == 0:
             #player2.stats['doubleshit'] = 1
@@ -373,7 +373,7 @@ class fiveOhOne:
             player1.stats['doubleshit'] += 1
             player1.stats['checkoutpc'] = round(player1.stats['doubleshit']/player1.stats['dartsatdoubles'] * 100, 2)
             game_state.currentlegs += 1
-            if player1.stats['legs'] == 3:
+            if player1.stats['legs'] ==game_state.legs:
                 player1.stats['sets'] += 1
                 player1.stats['legs'] = 0
                 player2.stats['legs'] = 0
@@ -381,26 +381,69 @@ class fiveOhOne:
                 game_state.currentlegs = 1
                 self.who_starts(game_state.currentsets, game_state.currentlegs)
             
-            print('1')
+            
         else:
             player2.stats['numberDarts'] -= (3 - lastDarts)
             player2.stats['legs'] += 1
             player2.stats['doubleshit'] +=1
             player2.stats['checkoutpc'] = round(player2.stats['doubleshit']/player2.stats['dartsatdoubles'] * 100, 2)
             game_state.currentlegs += 1
-            if player2.stats['legs'] == 3:
+            if player2.stats['legs'] == game_state.legs:
                 player2.stats['sets'] += 1
                 player2.stats['legs'] = 0
                 player2.stats['legs'] = 0
                 game_state.currentsets += 1
                 game_state.currentlegs = 1
                 self.who_starts(game_state.currentsets, game_state.currentlegs)
-            print('2')
+            
 
         self.who_starts(game_state.currentsets, game_state.currentlegs)
         self.stats_update(player1, player2)
         self.legWon.destroy()
-            
+        print(player1.stats['sets'])
+        print(player2.stats['sets'])
+        print(game_state.sets)
+        if player1.stats['sets'] == game_state.sets:
+            self.game_won()
+        elif player1.stats['sets'] == game_state.sets:
+            self.game_won()
+
+
+    def game_won(self):
+        self.gamewonwindow = Toplevel()
+        Label(self.gamewonwindow, text="Totals").grid(row=0, column=0, sticky='w')
+        Label(self.gamewonwindow, text="Sets:").grid(row=1, column=0, sticky='w')
+        Label(self.gamewonwindow, textvariable=self.pl1sets).grid(row=1, column=1)
+        Label(self.gamewonwindow, textvariable=self.pl2sets).grid(row=1, column=2)
+        Label(self.gamewonwindow, text="Legs:").grid(row=2, column=0, sticky='w')
+        Label(self.gamewonwindow, textvariable=self.pl1legs).grid(row=2, column=1)
+        Label(self.gamewonwindow, textvariable=self.pl2legs).grid(row=2, column=2)
+        Label(self.gamewonwindow, text="60+:").grid(row=3, column=0, sticky='w')
+        Label(self.gamewonwindow, textvariable=self.pl160).grid(row=3, column=1)
+        Label(self.gamewonwindow, textvariable=self.pl260).grid(row=3, column=2)
+        Label(self.gamewonwindow, text="80+:").grid(row=4, column=0, sticky='w')
+        Label(self.gamewonwindow, textvariable=self.pl180).grid(row=4, column=1)
+        Label(self.gamewonwindow, textvariable=self.pl280).grid(row=4, column=2)
+        Label(self.gamewonwindow, text="100+:").grid(row=5, column=0, sticky='w')
+        Label(self.gamewonwindow, textvariable=self.pl1100).grid(row=5, column=1)
+        Label(self.gamewonwindow, textvariable=self.pl2100).grid(row=5, column=2)
+        Label(self.gamewonwindow, text="140+:").grid(row=6, column=0, sticky='w')
+        Label(self.gamewonwindow, textvariable=self.pl1140).grid(row=6, column=1)
+        Label(self.gamewonwindow, textvariable=self.pl2140).grid(row=6, column=2)
+        Label(self.gamewonwindow, text="180:").grid(row=7, column=0, sticky='w')
+        Label(self.gamewonwindow, textvariable=self.pl1180).grid(row=7, column=1)
+        Label(self.gamewonwindow, textvariable=self.pl2180).grid(row=7, column=2)
+        Label(self.gamewonwindow, text="Averages").grid(row=8, column=0, sticky='w')
+        Label(self.gamewonwindow, text="Score:").grid(row=9, column=0, sticky='w')
+        Label(self.gamewonwindow, textvariable=self.pl1avg).grid(row=9, column=1)
+        Label(self.gamewonwindow, textvariable=self.pl2avg).grid(row=9, column=2)
+        Label(self.gamewonwindow, text="Checkout %:").grid(row=10, column=0, sticky='w')
+        Label(self.gamewonwindow, textvariable=self.pl1chtpc).grid(row=10, column=1)
+        Label(self.gamewonwindow, textvariable=self.pl2chtpc).grid(row=10, column=2)
+        Label(self.gamewonwindow, text="Checkout Hit/Thrown:").grid(row=11, column=0, sticky='w')
+        Label(self.gamewonwindow, textvariable=self.pl1chtnumbs).grid(row=11, column=1)
+        Label(self.gamewonwindow, textvariable=self.pl2chtnumbs).grid(row=11, column=2)
+        
 
 
         
@@ -452,8 +495,8 @@ class game:
     def setup(self, player1, player2, sets, legs):
         self.player1 = player1
         self.player2 = player2
-        self.legs = legs
-        self.sets = sets
+        self.legs = int(legs/2+1)
+        self.sets = int(sets/2+1)
             
 
         
