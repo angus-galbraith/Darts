@@ -60,7 +60,7 @@ class fiveOhOne:
         
         labFrame2.pack(side="right", fill="both",  expand=True)
         labFrame5.pack(side="bottom", fill="x",  expand=True)
-        labFrame3.pack(side="right", fill="both",  expand=True)
+        labFrame3.pack(side="left", fill="both",  expand=True)
         labFrame4.pack(side="right", fill="both",  expand=True)
         
 
